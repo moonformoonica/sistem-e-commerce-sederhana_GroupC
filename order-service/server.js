@@ -1,0 +1,119 @@
+const express = require('express');
+const cors = require('cors');
+const axios = require('axios');
+const { MongoClient } = require('mongodb');
+
+const app = express();
+const PORT = 3002;
+
+app.use(cors());
+app.use(express.json());
+
+const PRODUCT_SERVICE_URL = process.env.PRODUCT_SERVICE_URL || 'http://product-service:3001';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://mongo-db:27017';
+const DB_NAME = process.env.MONGO_DB || 'order_service';
+
+let ordersCol;
+let countersCol;
+
+async function initDatabase(retries = 15) {
+  while (retries > 0) {
+    try {
+      const client = new MongoClient(MONGO_URI);
+      await client.connect();
+      const db = client.db(DB_NAME);
+      ordersCol = db.collection('orders');
+      countersCol = db.collection('counters');
+      console.log('[order-service] MongoDB terhubung.');
+      return;
+    } catch (err) {
+      retries -= 1;
+      console.log(`[order-service] MongoDB belum siap (${err.message}). Sisa percobaan: ${retries}`);
+      await new Promise((r) => setTimeout(r, 3000));
+    }
+  }
+  throw new Error('[order-service] Gagal terhubung ke MongoDB.');
+}
+
+// Auto-increment id sederhana memakai collection counters
+async function nextOrderId() {
+  const r = await countersCol.findOneAndUpdate(
+    { _id: 'orderId' },
+    { $inc: { seq: 1 } },
+    { upsert: true, returnDocument: 'after' }
+  );
+  const doc = r && r.value ? r.value : r;
+  return doc.seq;
+}
+
+// ===== Routes =====
+app.get('/orders', async (req, res) => {
+  try {
+    const orders = await ordersCol.find({}, { projection: { _id: 0 } }).sort({ id: 1 }).toArray();
+    res.json(orders);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/orders/:id', async (req, res) => {
+  try {
+    const order = await ordersCol.findOne({ id: parseInt(req.params.id) }, { projection: { _id: 0 } });
+    if (!order) return res.status(404).json({ error: 'Order not found' });
+    res.json(order);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/orders', async (req, res) => {
+  try {
+    const { productId, quantity } = req.body;
+
+    // Cek product ke product service (REST)
+    const productResponse = await axios.get(`${PRODUCT_SERVICE_URL}/products/${productId}`);
+    const product = productResponse.data;
+
+    if (product.stock < quantity) {
+      return res.status(400).json({ error: 'Insufficient stock' });
+    }
+
+    // Update stock di product service
+    await axios.put(`${PRODUCT_SERVICE_URL}/products/${productId}/stock`, {
+      stock: product.stock - quantity,
+    });
+
+    const id = await nextOrderId();
+    const newOrder = {
+      id,
+      productId,
+      productName: product.name,
+      quantity,
+      totalPrice: product.price * quantity,
+      status: 'confirmed',
+      createdAt: new Date().toISOString(),
+    };
+
+    await ordersCol.insertOne({ ...newOrder });
+    res.status(201).json(newOrder);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create order' });
+  }
+});
+
+app.get('/health', (req, res) => {
+  res.json({
+    service: 'order-service',
+    language: 'JavaScript',
+    framework: 'Express',
+    database: 'mongodb',
+    status: 'running',
+  });
+});
+
+initDatabase()
+  .then(() => app.listen(PORT, () => console.log(`Order Service running on port ${PORT}`)))
+  .catch((e) => {
+    console.error(e.message);
+    process.exit(1);
+  });

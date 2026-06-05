@@ -1,0 +1,56 @@
+# ========== NODE / EXPRESS / APOLLO ==========
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.npm
+.env
+.env.local
+.env.*.local
+
+# ========== PYTHON / FLASK ==========
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# ========== JAVA / SPRING BOOT ==========
+product-service/target/
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+.mvn/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# ========== PHP ==========
+vendor/
+*.log
+
+# ========== DOCKER ==========
+.docker/
+
+# ========== DATABASE / VOLUMES ==========
+*.sqlite
+*.sqlite3
+*.db
+
+# ========== OS FILES ==========
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# ========== IDE ==========
+.idea/
+.vscode/
+*.iml

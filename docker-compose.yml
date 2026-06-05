@@ -1,0 +1,156 @@
+
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - api-gateway
+    networks:
+      - ecommerce-network
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8000:3000"
+    environment:
+      LARAVEL_SERVICE_URL: http://laravel-service:8000
+    depends_on:
+      - product-service
+      - order-service
+      - payment-service
+      - shipping-service
+      - laravel-service
+    networks:
+      - ecommerce-network
+
+  # Product Service - Java / Spring Boot + MySQL
+  product-service:
+    build: ./product-service
+    environment:
+      DB_HOST: mysql-db
+      DB_PORT: 3306
+      DB_NAME: product_service
+      DB_USER: product_user
+      DB_PASSWORD: product_pass
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    networks:
+      - ecommerce-network
+
+  # Order Service - Express.js + MongoDB
+  order-service:
+    build: ./order-service
+    environment:
+      PRODUCT_SERVICE_URL: http://product-service:3001
+      MONGO_URI: mongodb://mongo-db:27017
+      MONGO_DB: order_service
+    depends_on:
+      - product-service
+      - mongo-db
+    networks:
+      - ecommerce-network
+
+  # Payment Service - Python / Flask + PostgreSQL
+  payment-service:
+    build: ./payment-service
+    environment:
+      ORDER_SERVICE_URL: http://order-service:3002
+      DB_HOST: postgres-db
+      DB_PORT: 5432
+      DB_NAME: python_service
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      - order-service
+      - postgres-db
+    networks:
+      - ecommerce-network
+
+  # Shipping Service - PHP + SQLite
+  shipping-service:
+    build: ./shipping-service
+    environment:
+      SQLITE_PATH: /data/shipments.sqlite
+    volumes:
+      - shipping-data:/data
+    networks:
+      - ecommerce-network
+
+  # Laravel Service - PHP / Laravel + SQLite (tahap lanjutan, sesuai modul)
+  laravel-service:
+    build: ./laravel-service
+    container_name: laravel-service
+    ports:
+      - "8001:8000"
+    networks:
+      - ecommerce-network
+
+  # GraphQL Gateway - Apollo Server (JavaScript) : agregasi seluruh REST service
+  graphql-gateway:
+    build: ./graphql-gateway
+    ports:
+      - "4000:4000"
+    depends_on:
+      - product-service
+      - order-service
+      - payment-service
+      - shipping-service
+    networks:
+      - ecommerce-network
+
+  # PostgreSQL - for Python Service (Flask)
+  postgres-db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: python_service
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - ecommerce-network
+
+  # MySQL - for Product Service (Java / Spring Boot)
+  mysql-db:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: product_service
+      MYSQL_USER: product_user
+      MYSQL_PASSWORD: product_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+    networks:
+      - ecommerce-network
+
+  # MongoDB - for Order Service
+  mongo-db:
+    image: mongo:8
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  mysql-data:
+  mongo-data:
+  shipping-data:
