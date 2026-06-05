@@ -1,0 +1,28 @@
+# ===== Dependencies (dibuat otomatis saat `docker compose build`) =====
+**/node_modules/
+**/vendor/
+
+# ===== Build output =====
+**/target/
+*.jar
+*.class
+
+# ===== Python cache =====
+**/__pycache__/
+*.pyc
+**/.venv/
+**/venv/
+
+# ===== Logs =====
+*.log
+**/storage/logs/*.log
+
+# ===== OS / IDE =====
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+
+# Catatan:
+# - laravel-service/.env SENGAJA tetap ikut (berisi APP_KEY) agar build Laravel jalan.
+# - File .sqlite dibuat otomatis saat container start (migrate), jadi tidak perlu di-commit.
