@@ -2,6 +2,7 @@ package com.ecommerce.product;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,6 +57,17 @@ public class ProductController {
                     return ResponseEntity.ok(repo.save(p));
                 })
                 .orElseGet(() -> ResponseEntity.status(404).body(Map.of("error", "Product not found")));
+    }
+
+    // DELETE /products/{id}
+    @SuppressWarnings("null")
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        if (!repo.existsById(id)) {
+            return ResponseEntity.status(404).body(Map.of("error", "Product not found"));
+        }
+        repo.deleteById(id);
+        return ResponseEntity.ok(Map.of("message", "Product deleted", "id", id));
     }
 
     // GET /health

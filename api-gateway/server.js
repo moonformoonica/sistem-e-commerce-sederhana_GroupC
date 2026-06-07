@@ -177,6 +177,7 @@ app.get('/', (req, res) => {
 app.use('/api/products', createProxyMiddleware({
   target: 'http://product-service:3001',
   changeOrigin: true,
+  onProxyReq: fixRequestBody,
   pathRewrite: {
     '^/api/products': '/products'
   }
