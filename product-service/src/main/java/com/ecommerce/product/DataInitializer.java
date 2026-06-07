@@ -19,6 +19,8 @@ public class DataInitializer implements CommandLineRunner {
             repo.save(create("Laptop", 10000000, 10));
             repo.save(create("Mouse", 150000, 50));
             repo.save(create("Keyboard", 350000, 30));
+            repo.save(create("Webcam HD", 500000, 14));
+            repo.save(create("Headphone", 750000, 20));
         }
     }
 
