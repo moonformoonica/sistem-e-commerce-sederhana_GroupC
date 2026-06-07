@@ -13,6 +13,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     @Override
+    @SuppressWarnings("null")
     public void run(String... args) {
         if (repo.count() == 0) {
             repo.save(create("Laptop", 10000000, 10));
