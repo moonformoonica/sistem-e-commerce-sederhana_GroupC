@@ -15,7 +15,7 @@ docker exec $POSTGRES psql -U postgres -d python_service -c "TRUNCATE TABLE paym
 Write-Host ""
 
 Write-Host "=== [3/4] SHIPPING (SQLite) : hapus shipments + reset sequence ===" -ForegroundColor Cyan
-docker exec $SHIPPING php -r '$p=new PDO(''sqlite:/data/shipments.sqlite'');$p->exec(''DELETE FROM shipments'');$p->exec(''DELETE FROM sqlite_sequence'');echo ''shipments tersisa: ''.$p->query(''SELECT count(*) FROM shipments'')->fetchColumn().''\n'';'
+docker exec $SHIPPING php -r '$p=new PDO(''sqlite:/data/shipments.sqlite'');$p->exec(''DELETE FROM shipments'');$p->exec(''DELETE FROM sqlite_sequence'');echo ''shipments tersisa: ''.$p->query(''SELECT count(*) FROM shipments'')->fetchColumn().PHP_EOL;'
 Write-Host ""
 
 Write-Host "=== [4/4] PRODUCT (MySQL) : rapikan AUTO_INCREMENT ===" -ForegroundColor Cyan
