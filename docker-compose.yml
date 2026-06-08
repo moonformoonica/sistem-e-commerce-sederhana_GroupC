@@ -1,5 +1,3 @@
-
-
 services:
   frontend:
     build: ./frontend
@@ -115,7 +113,7 @@ services:
     networks:
       - ecommerce-network
 
-  # MySQL: for Product Service (Java / Spring Boot)
+  # MySQL: for Product Service (Java/Spring Boot)
   mysql-db:
     image: mysql:8.4
     environment:
