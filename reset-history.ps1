@@ -16,7 +16,6 @@ Write-Host "=== [3/4] SHIPPING (SQLite) : hapus shipments + reset sequence ===" 
 docker exec $SHIPPING php -r '$p=new PDO(''sqlite:/data/shipments.sqlite'');$p->exec(''DELETE FROM shipments'');$p->exec(''DELETE FROM sqlite_sequence'');echo ''shipments tersisa: ''.$p->query(''SELECT count(*) FROM shipments'')->fetchColumn();'
 
 Write-Host "=== [4/4] PRODUCT (MySQL) : rapikan AUTO_INCREMENT ===" -ForegroundColor Cyan
-
 docker exec $MYSQL mysql -uroot -proot -e "SET @next = (SELECT IFNULL(MAX(id),0)+1 FROM product_service.products); SET @sql = CONCAT('ALTER TABLE product_service.products AUTO_INCREMENT = ', @next); PREPARE s FROM @sql; EXECUTE s; DEALLOCATE PREPARE s; SELECT @next AS next_product_id;"
 
 Write-Host ""
