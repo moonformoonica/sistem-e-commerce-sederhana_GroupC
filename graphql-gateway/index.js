@@ -25,9 +25,9 @@ async function fetchJson(url, options = {}) {
   const response = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
-      ...(options.headers || {})
+      ...(options.headers || {}),
     },
-    ...options
+    ...options,
   });
 
   const data = await response.json();
@@ -141,7 +141,8 @@ const resolvers = {
 
     // Pengiriman
     shipments: () => fetchJson(`${SHIPPING_SERVICE_URL}/shipments`),
-    shipment: (_, { id }) => fetchJson(`${SHIPPING_SERVICE_URL}/shipments/${id}`),
+    shipment: (_, { id }) =>
+      fetchJson(`${SHIPPING_SERVICE_URL}/shipments/${id}`),
 
     // Laporan (Laravel Service)
     report: async () => {
@@ -156,28 +157,28 @@ const resolvers = {
         fetchJson(`${ORDER_SERVICE_URL}/health`),
         fetchJson(`${PAYMENT_SERVICE_URL}/health`),
         fetchJson(`${SHIPPING_SERVICE_URL}/health`),
-        fetchJson(`${LARAVEL_SERVICE_URL}/health`)
+        fetchJson(`${LARAVEL_SERVICE_URL}/health`),
       ]);
       return {
         product_service: product,
         order_service: order,
         payment_service: payment,
         shipping_service: shipping,
-        laravel_service: laravel
+        laravel_service: laravel,
       };
-    }
+    },
   },
 
   Mutation: {
     createProduct: (_, { name, price, stock }) =>
       fetchJson(`${PRODUCT_SERVICE_URL}/products`, {
         method: "POST",
-        body: JSON.stringify({ name, price, stock: stock ?? 0 })
+        body: JSON.stringify({ name, price, stock: stock ?? 0 }),
       }),
 
     deleteProduct: async (_, { id }) => {
       await fetchJson(`${PRODUCT_SERVICE_URL}/products/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
       });
       return true;
     },
@@ -185,27 +186,27 @@ const resolvers = {
     createOrder: (_, { productId, quantity }) =>
       fetchJson(`${ORDER_SERVICE_URL}/orders`, {
         method: "POST",
-        body: JSON.stringify({ productId, quantity })
+        body: JSON.stringify({ productId, quantity }),
       }),
 
     createPayment: (_, { orderId, amount }) =>
       fetchJson(`${PAYMENT_SERVICE_URL}/payments`, {
         method: "POST",
-        body: JSON.stringify({ orderId, amount })
+        body: JSON.stringify({ orderId, amount }),
       }),
 
     createShipment: (_, { orderId, address }) =>
       fetchJson(`${SHIPPING_SERVICE_URL}/shipments`, {
         method: "POST",
-        body: JSON.stringify({ orderId, address })
-      })
-  }
+        body: JSON.stringify({ orderId, address }),
+      }),
+  },
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
 const { url } = await startStandaloneServer(server, {
-  listen: { host: "0.0.0.0", port: PORT }
+  listen: { host: "0.0.0.0", port: PORT },
 });
 
 console.log(`GraphQL Gateway berjalan pada ${url}`);
