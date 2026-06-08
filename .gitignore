@@ -1,4 +1,4 @@
-# ===== Dependencies (dibuat otomatis saat `docker compose build`) =====
+# ===== Dependencies =====
 **/node_modules/
 **/vendor/
 
@@ -22,7 +22,3 @@
 Thumbs.db
 .idea/
 *.iml
-
-# Catatan:
-# - laravel-service/.env SENGAJA tetap ikut (berisi APP_KEY) agar build Laravel jalan.
-# - File .sqlite dibuat otomatis saat container start (migrate), jadi tidak perlu di-commit.
