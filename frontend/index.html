@@ -598,13 +598,19 @@
       }
 
       // Update cart display
+      // Catatan: badge di ikon keranjang sekarang menampilkan JUMLAH ORDER
+      // (lihat updateOrderBadge di loadOrders), bukan isi keranjang.
       function updateCartDisplay() {
         const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-        document.getElementById("cartCount").textContent = cartCount;
 
         if (cartCount === 0) {
           document.getElementById("cartSection").style.display = "none";
         }
+      }
+
+      // Badge ikon keranjang = jumlah pesanan di Order History
+      function updateOrderBadge() {
+        document.getElementById("cartCount").textContent = orders.length;
       }
 
       // Toggle cart
@@ -759,6 +765,7 @@
           if (!response.ok) throw new Error("Failed to load orders");
           orders = await response.json();
           renderOrders();
+          updateOrderBadge();
         } catch (error) {
           showError("ordersContainer", "Gagal memuat riwayat pesanan");
           console.error("Error:", error);
