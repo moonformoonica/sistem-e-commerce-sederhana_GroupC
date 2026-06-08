@@ -613,24 +613,40 @@
         document.getElementById("cartCount").textContent = orders.length;
       }
 
-      // Toggle cart
+      // Klik ikon keranjang.
+      // Badge menampilkan JUMLAH ORDER, jadi perilakunya:
+      //  - Kalau keranjang belanja ada isinya  -> tampilkan keranjang (alur checkout)
+      //  - Kalau keranjang kosong tapi ada order -> arahkan ke Order History
+      //  - Kalau dua-duanya kosong               -> info ramah
       function toggleCart() {
         const cartSection = document.getElementById("cartSection");
-        if (cart.length === 0) {
-          showModal(
-            "info",
-            "Keranjang Kosong",
-            "Silakan tambahkan produk terlebih dahulu",
-          );
+
+        if (cart.length > 0) {
+          if (cartSection.style.display === "none") {
+            renderCart();
+            cartSection.style.display = "block";
+            cartSection.scrollIntoView({ behavior: "smooth" });
+          } else {
+            cartSection.style.display = "none";
+          }
           return;
         }
 
-        if (cartSection.style.display === "none") {
-          renderCart();
-          cartSection.style.display = "block";
-          cartSection.scrollIntoView({ behavior: "smooth" });
+        if (orders.length > 0) {
+          showModal(
+            "info",
+            "Riwayat Pesanan",
+            `Kamu memiliki ${orders.length} pesanan. Menampilkan Order History...`,
+          );
+          document
+            .getElementById("ordersContainer")
+            .scrollIntoView({ behavior: "smooth" });
         } else {
-          cartSection.style.display = "none";
+          showModal(
+            "info",
+            "Belum Ada Aktivitas",
+            "Belum ada barang di keranjang maupun pesanan.",
+          );
         }
       }
 

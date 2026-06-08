@@ -76,32 +76,48 @@ app.get('/', (req, res) => {
     <body>
         <div class="container">
             <h1>🛒 E-Commerce Microservices Demo</h1>
-            <p>Sistem microservices 4 bahasa: Product &amp; Order (JavaScript), Payment (Python), Shipping (PHP), via API Gateway (JavaScript)</p>
+            <p>Sistem microservices polyglot (4 bahasa backend) via API Gateway (JavaScript / Express):</p>
+            <ul style="line-height:1.8">
+                <li><b>Product Service</b> — Java / Spring Boot + <b>MySQL</b></li>
+                <li><b>Order Service</b> — JavaScript / Express + <b>MongoDB</b></li>
+                <li><b>Payment Service</b> — Python / Flask + <b>PostgreSQL</b></li>
+                <li><b>Shipping Service</b> — PHP + <b>SQLite</b></li>
+                <li><b>Laravel Service</b> — PHP / Laravel + <b>SQLite</b> (endpoint <code>/report</code>)</li>
+            </ul>
             
             <h2>📋 Available Endpoints:</h2>
             <div class="endpoint">
-                <span class="method get">GET</span> /api/products - Get all products
+                <span class="method get">GET</span> /api/products - Get all products <i>(Java / Spring Boot + MySQL)</i>
             </div>
             <div class="endpoint">
-                <span class="method get">GET</span> /api/products/{id} - Get product by ID
+                <span class="method get">GET</span> /api/products/{id} - Get product by ID <i>(Java / Spring Boot + MySQL)</i>
             </div>
             <div class="endpoint">
-                <span class="method post">POST</span> /api/orders - Create new order
+                <span class="method post">POST</span> /api/products - Create product <i>(Java / Spring Boot + MySQL)</i>
             </div>
             <div class="endpoint">
-                <span class="method get">GET</span> /api/orders - Get all orders
+                <span class="method post">DELETE</span> /api/products/{id} - Delete product <i>(Java / Spring Boot + MySQL)</i>
             </div>
             <div class="endpoint">
-                <span class="method post">POST</span> /api/payments - Create payment (Python/Flask)
+                <span class="method post">POST</span> /api/orders - Create new order <i>(JavaScript / Express + MongoDB)</i>
             </div>
             <div class="endpoint">
-                <span class="method get">GET</span> /api/payments - Get all payments (Python/Flask)
+                <span class="method get">GET</span> /api/orders - Get all orders <i>(JavaScript / Express + MongoDB)</i>
             </div>
             <div class="endpoint">
-                <span class="method post">POST</span> /api/shipments - Create shipment (PHP)
+                <span class="method post">POST</span> /api/payments - Create payment <i>(Python / Flask + PostgreSQL)</i>
             </div>
             <div class="endpoint">
-                <span class="method get">GET</span> /api/shipments - Get all shipments (PHP)
+                <span class="method get">GET</span> /api/payments - Get all payments <i>(Python / Flask + PostgreSQL)</i>
+            </div>
+            <div class="endpoint">
+                <span class="method post">POST</span> /api/shipments - Create shipment <i>(PHP + SQLite)</i>
+            </div>
+            <div class="endpoint">
+                <span class="method get">GET</span> /api/shipments - Get all shipments <i>(PHP + SQLite)</i>
+            </div>
+            <div class="endpoint">
+                <span class="method get">GET</span> /api/report - Laporan <i>(PHP / Laravel + SQLite)</i>
             </div>
             <div class="endpoint">
                 <span class="method get">GET</span> /health - Check services health
