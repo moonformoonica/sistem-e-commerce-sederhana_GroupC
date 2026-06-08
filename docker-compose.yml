@@ -25,7 +25,7 @@ services:
     networks:
       - ecommerce-network
 
-  # Product Service - Java / Spring Boot + MySQL
+  # Product Service: Java/Spring Boot+MySQL
   product-service:
     build: ./product-service
     environment:
@@ -40,7 +40,7 @@ services:
     networks:
       - ecommerce-network
 
-  # Order Service - Express.js + MongoDB
+  # Order Service: JavaScript/Node.js & Express.js+MongoDB
   order-service:
     build: ./order-service
     environment:
@@ -53,7 +53,7 @@ services:
     networks:
       - ecommerce-network
 
-  # Payment Service - Python / Flask + PostgreSQL
+  # Payment Service: Python/Flask+PostgreSQL
   payment-service:
     build: ./payment-service
     environment:
@@ -69,7 +69,7 @@ services:
     networks:
       - ecommerce-network
 
-  # Shipping Service - PHP + SQLite
+  # Shipping Service: PHP/PHP+SQLite
   shipping-service:
     build: ./shipping-service
     environment:
@@ -79,7 +79,7 @@ services:
     networks:
       - ecommerce-network
 
-  # Laravel Service - PHP / Laravel + SQLite (tahap lanjutan, sesuai modul)
+  # Laravel Service: PHP/Laravel+SQLite
   laravel-service:
     build: ./laravel-service
     container_name: laravel-service
@@ -88,7 +88,7 @@ services:
     networks:
       - ecommerce-network
 
-  # GraphQL Gateway - Apollo Server (JavaScript) : agregasi seluruh REST service
+  # GraphQL Gateway: JavaScript/Node.js & Apollo Server utk agregasi seluruh REST service
   graphql-gateway:
     build: ./graphql-gateway
     ports:
@@ -101,7 +101,7 @@ services:
     networks:
       - ecommerce-network
 
-  # PostgreSQL - for Python Service (Flask)
+  # PostgreSQL: for Python Service (Flask)
   postgres-db:
     image: postgres:17
     environment:
@@ -115,7 +115,7 @@ services:
     networks:
       - ecommerce-network
 
-  # MySQL - for Product Service (Java / Spring Boot)
+  # MySQL: for Product Service (Java / Spring Boot)
   mysql-db:
     image: mysql:8.4
     environment:
@@ -135,7 +135,7 @@ services:
     networks:
       - ecommerce-network
 
-  # MongoDB - for Order Service
+  # MongoDB: for Order Service
   mongo-db:
     image: mongo:8
     ports:

@@ -9,13 +9,13 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
-// Middleware untuk logging
+// Middleware for loggin'
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
 
-// Halaman utama (HTML)
+// Main Page
 app.get('/', (req, res) => {
   res.send(`
     <!DOCTYPE html>

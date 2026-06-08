@@ -1,7 +1,3 @@
-# ============================================================
-#  Payment Service - Python / Flask + PostgreSQL
-#  Mengelola pembayaran untuk setiap order.
-# ============================================================
 import os
 import time
 
@@ -102,7 +98,7 @@ def create_payment():
     if order_id is None:
         return jsonify({"error": "orderId is required"}), 400
 
-    # Jika amount tidak dikirim, ambil dari Order Service
+    # KALOOO amount ga dikirim, ambil dari Order Service
     if amount is None:
         try:
             resp = requests.get(f"{ORDER_SERVICE_URL}/orders/{order_id}", timeout=5)

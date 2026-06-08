@@ -47,7 +47,7 @@ public class ProductController {
         return ResponseEntity.status(201).body(repo.save(p));
     }
 
-    // PUT /products/{id}/stock  (dipanggil oleh Order Service)
+    // PUT /products/{id}/stock  (dipanggil sm Order Service)
     @SuppressWarnings("null")
     @PutMapping("/products/{id}/stock")
     public ResponseEntity<?> updateStock(@PathVariable Long id, @RequestBody Map<String, Object> body) {

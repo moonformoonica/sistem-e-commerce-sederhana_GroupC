@@ -1,8 +1,4 @@
 <?php
-// ============================================================
-//  Shipping Service - PHP + SQLite (PDO)
-//  Mengelola data pengiriman untuk setiap order.
-// ============================================================
 
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");

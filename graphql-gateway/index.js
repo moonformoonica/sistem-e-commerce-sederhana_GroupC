@@ -1,11 +1,10 @@
-// ============================================================
 //  GraphQL Gateway - Apollo Server
 //  Agregasi 4 fitur microservice (sesuai project mini):
 //    - product-service  (JavaScript / Express) :3001  -> Produk
 //    - order-service    (JavaScript / Express) :3002  -> Riwayat Pesanan
 //    - payment-service  (Python / Flask)        :3003  -> Pembayaran
 //    - shipping-service (PHP)                    :3004  -> Pengiriman
-// ============================================================
+// ========================================================================
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 
