@@ -23,13 +23,13 @@ public class ProductController {
         this.repo = repo;
     }
 
-    // GET /products
+    // getAllProducts | GET http://localhost:3001/products
     @GetMapping("/products")
     public List<Product> all() {
         return repo.findAll();
     }
 
-    // GET /products/{id}
+    // getProductById | GET http://localhost:3001/products/1
     @SuppressWarnings("null")
     @GetMapping("/products/{id}")
     public ResponseEntity<?> one(@PathVariable Long id) {
@@ -38,7 +38,7 @@ public class ProductController {
                 .orElseGet(() -> ResponseEntity.status(404).body(Map.of("error", "Product not found")));
     }
 
-    // POST /products
+    // createProduct | POST http://localhost:3001/products -d '{"name": "Laptop", "price": 10000, "stock": 5}'
     @PostMapping("/products")
     public ResponseEntity<Product> create(@RequestBody Product p) {
         if (p.getStock() == null) {
@@ -47,7 +47,7 @@ public class ProductController {
         return ResponseEntity.status(201).body(repo.save(p));
     }
 
-    // PUT /products/{id}/stock  (dipanggil sm Order Service)
+    // updateStock | PUT http://localhost:3001/products/1/stock -d '{"stock": 10}'
     @SuppressWarnings("null")
     @PutMapping("/products/{id}/stock")
     public ResponseEntity<?> updateStock(@PathVariable Long id, @RequestBody Map<String, Object> body) {
@@ -59,7 +59,7 @@ public class ProductController {
                 .orElseGet(() -> ResponseEntity.status(404).body(Map.of("error", "Product not found")));
     }
 
-    // PUT /products/{id} - update penuh (name, price, stock) via JPA
+    // updateProduct | PUT http://localhost:3001/products/1 -d '{"name": "Laptop", "price": 10000, "stock": 5}'
     @SuppressWarnings("null")
     @PutMapping("/products/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Product body) {
@@ -79,7 +79,7 @@ public class ProductController {
                 .orElseGet(() -> ResponseEntity.status(404).body(Map.of("error", "Product not found")));
     }
 
-    // DELETE /products/{id}
+    // deleteProduct | DELETE http://localhost:3001/products/1
     @SuppressWarnings("null")
     @DeleteMapping("/products/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
@@ -90,7 +90,7 @@ public class ProductController {
         return ResponseEntity.ok(Map.of("message", "Product deleted", "id", id));
     }
 
-    // GET /health
+    // health | GET http://localhost:3001/health
     @GetMapping("/health")
     public Map<String, String> health() {
         return Map.of(

@@ -63,6 +63,7 @@ def row_to_payment(r):
     }
 
 
+# listPayments | GET http://localhost:3003/payments
 @app.route("/payments", methods=["GET"])
 def list_payments():
     conn = get_conn()
@@ -74,6 +75,7 @@ def list_payments():
     return jsonify([row_to_payment(r) for r in rows])
 
 
+# getPaymentByOrder | GET http://localhost:3003/payments/order/1
 @app.route("/payments/order/<int:order_id>", methods=["GET"])
 def get_payment_by_order(order_id):
     # Didefinisikan SEBELUM /payments/<id> agar tidak salah routing
@@ -91,6 +93,7 @@ def get_payment_by_order(order_id):
     return jsonify(row_to_payment(row))
 
 
+# getPaymentById | GET http://localhost:3003/payments/1
 @app.route("/payments/<int:payment_id>", methods=["GET"])
 def get_payment(payment_id):
     conn = get_conn()
@@ -104,6 +107,7 @@ def get_payment(payment_id):
     return jsonify(row_to_payment(row))
 
 
+# createPayment | POST http://localhost:3003/payments -d '{"orderId": 1, "method": "transfer"}'
 @app.route("/payments", methods=["POST"])
 def create_payment():
     data = request.get_json(silent=True) or {}
@@ -138,6 +142,8 @@ def create_payment():
     return jsonify(row_to_payment(row)), 201
 
 
+# updatePaymentStatus | PUT http://localhost:3003/payments/1/status -d '{"status": "refunded"}'
+# status valid: paid | pending | refunded
 @app.route("/payments/<int:payment_id>/status", methods=["PUT"])
 def update_payment_status(payment_id):
     data = request.get_json(silent=True) or {}
@@ -161,6 +167,7 @@ def update_payment_status(payment_id):
     return jsonify(row_to_payment(row))
 
 
+# health | GET http://localhost:3003/health
 @app.route("/health", methods=["GET"])
 def health():
     return jsonify({

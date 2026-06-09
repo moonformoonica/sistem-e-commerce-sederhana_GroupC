@@ -47,6 +47,8 @@ async function nextOrderId() {
 }
 
 // ===== Routes =====
+
+// getAllOrders | GET http://localhost:3002/orders
 app.get('/orders', async (req, res) => {
   try {
     const orders = await ordersCol.find({}, { projection: { _id: 0 } }).sort({ id: 1 }).toArray();
@@ -56,6 +58,7 @@ app.get('/orders', async (req, res) => {
   }
 });
 
+// getOrderById | GET http://localhost:3002/orders/1
 app.get('/orders/:id', async (req, res) => {
   try {
     const order = await ordersCol.findOne({ id: parseInt(req.params.id) }, { projection: { _id: 0 } });
@@ -66,6 +69,7 @@ app.get('/orders/:id', async (req, res) => {
   }
 });
 
+// createOrder | POST http://localhost:3002/orders -d '{"productId": 1, "quantity": 2}'
 app.post('/orders', async (req, res) => {
   try {
     const { productId, quantity } = req.body;
@@ -101,7 +105,8 @@ app.post('/orders', async (req, res) => {
   }
 });
 
-// PUT /orders/:id/status - ubah status (confirmed/shipped/delivered/cancelled)
+// updateOrderStatus | PUT http://localhost:3002/orders/1/status -d '{"status": "shipped"}'
+// status valid: confirmed | shipped | delivered | cancelled
 app.put('/orders/:id/status', async (req, res) => {
   try {
     const { status } = req.body;
@@ -123,7 +128,7 @@ app.put('/orders/:id/status', async (req, res) => {
   }
 });
 
-// DELETE /orders/:id
+// deleteOrder | DELETE http://localhost:3002/orders/1
 app.delete('/orders/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -135,6 +140,7 @@ app.delete('/orders/:id', async (req, res) => {
   }
 });
 
+// GET http://localhost:3002/health
 app.get('/health', (req, res) => {
   res.json({
     service: 'order-service',
