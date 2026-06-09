@@ -5,389 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>E-Commerce Store</title>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
+      * { margin: 0; padding: 0; box-sizing: border-box; }
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #66a4ea 0%, #305bbd, #122e70 100%);
         min-height: 100vh;
         padding: 20px;
       }
-
-      .container {
-        max-width: 1400px;
-        margin: 0 auto;
-      }
-
-      /* Header */
+      .container { max-width: 1400px; margin: 0 auto; }
       .header {
-        background: white;
-        border-radius: 15px;
-        padding: 20px 30px;
-        margin-bottom: 30px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        background: white; border-radius: 15px; padding: 20px 30px;
+        margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        display: flex; justify-content: space-between; align-items: center;
       }
-
-      .logo h1 {
-        color: #000000;
-        font-size: 28px;
+      .logo h1 { color: #000; font-size: 28px; }
+      .logo p { color: #666; font-size: 12px; }
+      .header-actions { display: flex; align-items: center; gap: 18px; }
+      .refresh-btn {
+        background: #4867ef; color: white; border: none; border-radius: 8px;
+        padding: 10px 16px; cursor: pointer; font-weight: bold;
       }
-
-      .logo p {
-        color: #666;
-        font-size: 12px;
-      }
-
-      .cart-icon {
-        position: relative;
-        cursor: pointer;
-        font-size: 30px;
-      }
-
+      .cart-icon { position: relative; cursor: pointer; font-size: 30px; }
       .cart-count {
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        background: #f56565;
-        color: white;
-        border-radius: 50%;
-        padding: 2px 8px;
-        font-size: 12px;
-        font-weight: bold;
+        position: absolute; top: -10px; right: -10px; background: #f56565;
+        color: white; border-radius: 50%; padding: 2px 8px; font-size: 12px; font-weight: bold;
       }
-
-      /* Product Grid */
-      .products-section {
-        background: white;
-        border-radius: 15px;
-        padding: 30px;
-        margin-bottom: 30px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      .products-section, .cart-section, .orders-section {
+        background: white; border-radius: 15px; padding: 30px;
+        margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       }
-
+      .orders-section { margin-top: 30px; margin-bottom: 0; }
       .section-title {
-        font-size: 24px;
-        margin-bottom: 20px;
-        color: #333;
-        border-left: 4px solid #4867ef;
-        padding-left: 15px;
+        font-size: 24px; margin-bottom: 20px; color: #333;
+        border-left: 4px solid #4867ef; padding-left: 15px;
       }
-
-      .product-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 25px;
+      /* Add product form */
+      .add-form { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px; }
+      .add-form input { padding: 10px; border: 1px solid #ddd; border-radius: 6px; }
+      .add-form button {
+        background: #48bb78; color: white; border: none; border-radius: 6px;
+        padding: 10px 18px; cursor: pointer; font-weight: bold;
       }
-
-      .product-card {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 20px;
-        transition:
-          transform 0.3s,
-          box-shadow 0.3s;
-        cursor: pointer;
-      }
-
-      .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-      }
-
-      .product-name {
-        font-size: 20px;
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 10px;
-      }
-
-      .product-price {
-        font-size: 24px;
-        color: #4867ef;
-        font-weight: bold;
-        margin: 10px 0;
-      }
-
-      .product-price::before {
-        content: "Rp ";
-        font-size: 16px;
-      }
-
-      .product-stock {
-        color: #666;
-        margin-bottom: 15px;
-      }
-
-      .stock-badge {
-        display: inline-block;
-        padding: 3px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: bold;
-      }
-
-      .stock-high {
-        background: #c6f6d5;
-        color: #22543d;
-      }
-
-      .stock-low {
-        background: #fed7d7;
-        color: #742a2a;
-      }
-
-      .quantity-control {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin: 15px 0;
-      }
-
-      .quantity-btn {
-        width: 35px;
-        height: 35px;
-        border: none;
-        background: #4867ef;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 18px;
-        transition: background 0.3s;
-      }
-
-      .quantity-btn:hover {
-        background: #4867ef;
-      }
-
-      .quantity-btn:disabled {
-        background: #cbd5e0;
-        cursor: not-allowed;
-      }
-
-      .quantity-input {
-        width: 60px;
-        text-align: center;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 16px;
-      }
-
-      .add-to-cart {
-        width: 100%;
-        padding: 10px;
-        background: #48bb78;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: bold;
-        transition: background 0.3s;
-      }
-
-      .add-to-cart:hover {
-        background: #38a169;
-      }
-
-      .add-to-cart:disabled {
-        background: #cbd5e0;
-        cursor: not-allowed;
-      }
-
-      /* Cart Section */
-      .cart-section {
-        background: white;
-        border-radius: 15px;
-        padding: 30px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      }
-
-      .cart-items {
-        margin: 20px 0;
-      }
-
-      .cart-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px;
-        border-bottom: 1px solid #e2e8f0;
-      }
-
-      .cart-item-info h4 {
-        color: #333;
-        margin-bottom: 5px;
-      }
-
-      .cart-item-price {
-        color: #4867ef;
-        font-weight: bold;
-      }
-
-      .cart-item-quantity {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .remove-item {
-        background: #f56565;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 12px;
-      }
-
-      .cart-total {
-        text-align: right;
-        padding: 20px;
-        font-size: 24px;
-        font-weight: bold;
-        border-top: 2px solid #e2e8f0;
-        margin-top: 20px;
-      }
-
-      .checkout-btn {
-        width: 100%;
-        padding: 15px;
-        background: #4867ef;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background 0.3s;
-      }
-
-      .checkout-btn:hover {
-        background: #4867ef;
-      }
-
-      /* Orders Section */
-      .orders-section {
-        background: white;
-        border-radius: 15px;
-        padding: 30px;
-        margin-top: 30px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      }
-
-      .order-card {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 15px;
-      }
-
-      .order-header {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #e2e8f0;
-      }
-
-      .order-id {
-        font-weight: bold;
-        color: #4867ef;
-      }
-
-      .order-status {
-        padding: 3px 10px;
-        border-radius: 20px;
-        background: #c6f6d5;
-        color: #22543d;
-        font-size: 12px;
-        font-weight: bold;
-      }
-
-      .order-details {
-        color: #666;
-      }
-
+      .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+      .product-card { background: #f8f9fa; border-radius: 10px; padding: 20px; transition: transform 0.3s, box-shadow 0.3s; }
+      .product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); }
+      .product-name { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 10px; }
+      .product-price { font-size: 24px; color: #4867ef; font-weight: bold; margin: 10px 0; }
+      .product-price::before { content: "Rp "; font-size: 16px; }
+      .product-stock { color: #666; margin-bottom: 15px; }
+      .stock-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+      .stock-high { background: #c6f6d5; color: #22543d; }
+      .stock-low { background: #fed7d7; color: #742a2a; }
+      .quantity-control { display: flex; align-items: center; gap: 10px; margin: 15px 0; }
+      .quantity-btn { width: 35px; height: 35px; border: none; background: #4867ef; color: white; border-radius: 5px; cursor: pointer; font-size: 18px; }
+      .quantity-btn:disabled { background: #cbd5e0; cursor: not-allowed; }
+      .quantity-input { width: 60px; text-align: center; padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
+      .add-to-cart { width: 100%; padding: 10px; background: #48bb78; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; }
+      .add-to-cart:disabled { background: #cbd5e0; cursor: not-allowed; }
+      /* Row actions (edit/delete/status) */
+      .row-actions { display: flex; gap: 8px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+      .status-select { padding: 6px; border: 1px solid #ddd; border-radius: 5px; }
+      .btn-sm { padding: 7px 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: white; font-size: 13px; }
+      .btn-blue { background: #4867ef; }
+      .btn-red { background: #f56565; }
+      .btn-edit { background: #ed8936; }
+      /* Cart */
+      .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #e2e8f0; }
+      .cart-item-info h4 { color: #333; margin-bottom: 5px; }
+      .cart-item-price { color: #4867ef; font-weight: bold; }
+      .cart-item-quantity { display: flex; align-items: center; gap: 10px; }
+      .remove-item { background: #f56565; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+      .cart-total { text-align: right; padding: 20px; font-size: 24px; font-weight: bold; border-top: 2px solid #e2e8f0; margin-top: 20px; }
+      .checkout-btn { width: 100%; padding: 15px; background: #4867ef; color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; }
+      .order-card { background: #f8f9fa; border-radius: 10px; padding: 20px; margin-bottom: 15px; }
+      .order-header { display: flex; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; }
+      .order-id { font-weight: bold; color: #4867ef; }
+      .order-status { padding: 3px 10px; border-radius: 20px; background: #c6f6d5; color: #22543d; font-size: 12px; font-weight: bold; }
+      .order-details { color: #666; }
       /* Modal */
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-      }
-
-      .modal-content {
-        background: white;
-        padding: 30px;
-        border-radius: 15px;
-        max-width: 500px;
-        text-align: center;
-      }
-
-      .modal-success {
-        color: #48bb78;
-        font-size: 50px;
-        margin-bottom: 20px;
-      }
-
-      .modal-error {
-        color: #f56565;
-        font-size: 50px;
-        margin-bottom: 20px;
-      }
-
-      .loading {
-        grid-column: 1 / -1; /* span semua kolom grid agar benar-benar di tengah */
-        width: 100%;
-        text-align: center;
-        padding: 50px;
-        font-size: 18px;
-        color: #666;
-      }
-
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-
-      .loader {
-        border: 3px solid #f3f3f3;
-        border-top: 3px solid #4867ef;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        animation: spin 1s linear infinite;
-        margin: 20px auto;
-      }
-
-      @media (max-width: 768px) {
-        .product-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .header {
-          flex-direction: column;
-          gap: 15px;
-        }
-      }
+      .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1000; }
+      .modal-content { background: white; padding: 30px; border-radius: 15px; max-width: 500px; text-align: center; }
+      .modal-success { color: #48bb78; font-size: 50px; margin-bottom: 20px; }
+      .modal-error { color: #f56565; font-size: 50px; margin-bottom: 20px; }
+      .loading { grid-column: 1 / -1; width: 100%; text-align: center; padding: 50px; font-size: 18px; color: #666; }
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      .loader { border: 3px solid #f3f3f3; border-top: 3px solid #4867ef; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+      @media (max-width: 768px) { .product-grid { grid-template-columns: 1fr; } .header { flex-direction: column; gap: 15px; } }
     </style>
   </head>
   <body>
@@ -396,45 +99,51 @@
       <div class="header">
         <div class="logo">
           <h1>🛍️ E-Commerce Store</h1>
-          <p>Microservices Demo</p>
+          <p>Microservices Demo (Java • Node • Python • PHP)</p>
         </div>
-        <div class="cart-icon" onclick="toggleCart()">
-          🛒
-          <span class="cart-count" id="cartCount">0</span>
+        <div class="header-actions">
+          <button class="refresh-btn" onclick="refreshAll()">🔄 Refresh</button>
+          <div class="cart-icon" onclick="toggleCart()">
+            🛒 <span class="cart-count" id="cartCount">0</span>
+          </div>
         </div>
       </div>
 
-      <!-- Products Section -->
+      <!-- Products Section (Product Service - Java / MySQL) -->
       <div class="products-section">
-        <h2 class="section-title">🛒 Our Product</h2>
+        <h2 class="section-title">🛒 Produk (Java / MySQL)</h2>
+        <div class="add-form">
+          <input id="np_name" placeholder="Nama produk" />
+          <input id="np_price" type="number" placeholder="Harga" />
+          <input id="np_stock" type="number" placeholder="Stok" />
+          <button onclick="createProduct()">➕ Tambah Produk</button>
+        </div>
         <div id="productsContainer" class="product-grid"></div>
       </div>
 
       <!-- Cart Section -->
       <div class="cart-section" id="cartSection" style="display: none">
-        <h2 class="section-title">🛍️ Shopping Cart</h2>
+        <h2 class="section-title">🛍️ Keranjang Belanja</h2>
         <div id="cartItems" class="cart-items"></div>
         <div id="cartTotal" class="cart-total"></div>
-        <button class="checkout-btn" onclick="checkout()">
-          ✅ Checkout Sekarang
-        </button>
+        <button class="checkout-btn" onclick="checkout()">✅ Checkout Sekarang</button>
       </div>
 
-      <!-- Orders Section -->
+      <!-- Orders Section (Order Service - Node / MongoDB) -->
       <div class="orders-section">
-        <h2 class="section-title">📋 Order History</h2>
+        <h2 class="section-title">📋 Pesanan (Node / MongoDB)</h2>
         <div id="ordersContainer"></div>
       </div>
 
-      <!-- Payments Section (Python / Flask) -->
+      <!-- Payments Section (Payment Service - Python / PostgreSQL) -->
       <div class="orders-section">
-        <h2 class="section-title">💳Payment</h2>
+        <h2 class="section-title">💳 Pembayaran (Python / PostgreSQL)</h2>
         <div id="paymentsContainer"></div>
       </div>
 
-      <!-- Shipments Section (PHP) -->
+      <!-- Shipments Section (Shipping Service - PHP / SQLite) -->
       <div class="orders-section">
-        <h2 class="section-title">🚚 Shipping</h2>
+        <h2 class="section-title">🚚 Pengiriman (PHP / SQLite)</h2>
         <div id="shipmentsContainer"></div>
       </div>
     </div>
@@ -444,541 +153,344 @@
       <div class="modal-content">
         <div id="modalIcon"></div>
         <h2 id="modalTitle"></h2>
-        <p id="modalMessage"></p>
-        <button
-          onclick="closeModal()"
-          style="
-            margin-top: 20px;
-            padding: 10px 30px;
-            background: #4867ef;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-          "
-        >
-          Tutup
-        </button>
+        <p id="modalMessage" style="white-space: pre-line"></p>
+        <button onclick="closeModal()" style="margin-top:20px;padding:10px 30px;background:#4867ef;color:white;border:none;border-radius:5px;cursor:pointer;">Tutup</button>
       </div>
     </div>
 
     <script>
-      // State management
       let products = [];
-      let cart = JSON.parse(localStorage.getItem("cart") || "[]");
       let orders = [];
-
-      // API base URL
+      let cart = JSON.parse(localStorage.getItem("cart") || "[]");
       const API_URL = window.location.origin;
 
-      // Initialize
-      document.addEventListener("DOMContentLoaded", () => {
+      document.addEventListener("DOMContentLoaded", refreshAll);
+
+      function refreshAll() {
         loadProducts();
         loadOrders();
         loadPayments();
         loadShipments();
         updateCartDisplay();
-      });
+      }
 
-      // Load products from API
+      // ---------- Helpers ----------
+      function statusSelect(elId, current, options) {
+        return `<select id="${elId}" class="status-select">` +
+          options.map((o) => `<option value="${o}" ${o === current ? "selected" : ""}>${o}</option>`).join("") +
+          `</select>`;
+      }
+      function formatRupiah(amount) {
+        return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(amount || 0);
+      }
+      function showLoading(id) { document.getElementById(id).innerHTML = '<div class="loader"></div>'; }
+      function showError(id, msg) { document.getElementById(id).innerHTML = `<div class="loading">❌ ${msg}</div>`; }
+      function showModal(type, title, message) {
+        const icons = { success: "✅", error: "❌", warning: "⚠️", info: "ℹ️" };
+        document.getElementById("modalIcon").innerHTML = `<div class="modal-${type}">${icons[type] || "ℹ️"}</div>`;
+        document.getElementById("modalTitle").textContent = title;
+        document.getElementById("modalMessage").textContent = message;
+        document.getElementById("modal").style.display = "flex";
+        if (type === "success") setTimeout(closeModal, 2500);
+      }
+      function closeModal() { document.getElementById("modal").style.display = "none"; }
+
+      // ================= PRODUCTS (Java / MySQL) =================
       async function loadProducts() {
         showLoading("productsContainer");
         try {
-          const response = await fetch(`${API_URL}/api/products`);
-          if (!response.ok) throw new Error("Failed to load products");
-          products = await response.json();
+          const r = await fetch(`${API_URL}/api/products`);
+          if (!r.ok) throw new Error();
+          products = await r.json();
           renderProducts();
-        } catch (error) {
-          showError("productsContainer", "Gagal memuat produk");
-          console.error("Error:", error);
-        }
+        } catch (e) { showError("productsContainer", "Gagal memuat produk"); }
       }
 
-      // Render products
       function renderProducts() {
-        const container = document.getElementById("productsContainer");
-        if (!products.length) {
-          container.innerHTML =
-            '<div class="loading">Tidak ada produk tersedia</div>';
-          return;
-        }
-
-        container.innerHTML = products
-          .map(
-            (product) => `
-                <div class="product-card">
-                    <div class="product-name">${product.name}</div>
-                    <div class="product-price">${formatRupiah(product.price)}</div>
-                    <div class="product-stock">
-                        Stok: 
-                        <span class="stock-badge ${product.stock > 10 ? "stock-high" : "stock-low"}">
-                            ${product.stock} unit
-                        </span>
-                    </div>
-                    <div class="quantity-control">
-                        <button class="quantity-btn" onclick="changeQuantity(${product.id}, -1)">-</button>
-                        <input type="number" id="qty_${product.id}" class="quantity-input" value="1" min="1" max="${product.stock}">
-                        <button class="quantity-btn" onclick="changeQuantity(${product.id}, 1)">+</button>
-                    </div>
-                    <button class="add-to-cart" onclick="addToCart(${product.id})" ${product.stock === 0 ? "disabled" : ""}>
-                        ${product.stock === 0 ? "Stok Habis" : "Tambah ke Keranjang"}
-                    </button>
-                    <button onclick="deleteProduct(${product.id})" style="width:100%;padding:8px;margin-top:8px;background:#f56565;color:white;border:none;border-radius:5px;cursor:pointer;font-weight:bold;">🗑️ Hapus Produk</button>
-                </div>
-            `,
-          )
-          .join("");
+        const c = document.getElementById("productsContainer");
+        if (!products.length) { c.innerHTML = '<div class="loading">Tidak ada produk</div>'; return; }
+        c.innerHTML = products.map((p) => `
+          <div class="product-card">
+            <div class="product-name">${p.name}</div>
+            <div class="product-price">${formatRupiah(p.price)}</div>
+            <div class="product-stock">Stok:
+              <span class="stock-badge ${p.stock > 10 ? "stock-high" : "stock-low"}">${p.stock} unit</span>
+            </div>
+            <div class="quantity-control">
+              <button class="quantity-btn" onclick="changeQuantity(${p.id}, -1)">-</button>
+              <input type="number" id="qty_${p.id}" class="quantity-input" value="1" min="1" max="${p.stock}">
+              <button class="quantity-btn" onclick="changeQuantity(${p.id}, 1)">+</button>
+            </div>
+            <button class="add-to-cart" onclick="addToCart(${p.id})" ${p.stock === 0 ? "disabled" : ""}>
+              ${p.stock === 0 ? "Stok Habis" : "Tambah ke Keranjang"}
+            </button>
+            <div class="row-actions">
+              <button class="btn-sm btn-edit" onclick="editProduct(${p.id})">✏️ Edit</button>
+              <button class="btn-sm btn-red" onclick="deleteProduct(${p.id})">🗑️ Hapus</button>
+            </div>
+          </div>`).join("");
       }
 
-      // Change quantity
-      function changeQuantity(productId, delta) {
-        const input = document.getElementById(`qty_${productId}`);
-        let newValue = parseInt(input.value) + delta;
-        const product = products.find((p) => p.id === productId);
-
-        if (newValue < 1) newValue = 1;
-        if (product && newValue > product.stock) newValue = product.stock;
-
-        input.value = newValue;
+      function changeQuantity(id, delta) {
+        const input = document.getElementById(`qty_${id}`);
+        const p = products.find((x) => x.id === id);
+        let v = parseInt(input.value) + delta;
+        if (v < 1) v = 1;
+        if (p && v > p.stock) v = p.stock;
+        input.value = v;
       }
 
-      // Hapus produk (Product Service - Java/MySQL)
-      async function deleteProduct(productId) {
+      // POST /api/products
+      async function createProduct() {
+        const name = document.getElementById("np_name").value.trim();
+        const price = parseInt(document.getElementById("np_price").value);
+        const stockRaw = document.getElementById("np_stock").value;
+        const stock = stockRaw === "" ? 0 : parseInt(stockRaw);
+        if (!name || isNaN(price)) { showModal("error", "Input kurang", "Isi minimal Nama dan Harga"); return; }
+        try {
+          const r = await fetch(`${API_URL}/api/products`, {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, price, stock }),
+          });
+          if (!r.ok) throw new Error();
+          document.getElementById("np_name").value = "";
+          document.getElementById("np_price").value = "";
+          document.getElementById("np_stock").value = "";
+          showModal("success", "Berhasil", "Produk ditambahkan");
+          await loadProducts();
+        } catch (e) { showModal("error", "Gagal", "Tidak bisa menambah produk"); }
+      }
+
+      // PUT /api/products/{id}  (update penuh)
+      async function editProduct(id) {
+        const p = products.find((x) => x.id === id);
+        if (!p) return;
+        const name = prompt("Nama produk:", p.name); if (name === null) return;
+        const priceStr = prompt("Harga:", p.price); if (priceStr === null) return;
+        const stockStr = prompt("Stok:", p.stock); if (stockStr === null) return;
+        try {
+          const r = await fetch(`${API_URL}/api/products/${id}`, {
+            method: "PUT", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, price: parseInt(priceStr), stock: parseInt(stockStr) }),
+          });
+          if (!r.ok) throw new Error();
+          showModal("success", "Berhasil", "Produk diperbarui");
+          await loadProducts();
+        } catch (e) { showModal("error", "Gagal", "Tidak bisa memperbarui produk"); }
+      }
+
+      // DELETE /api/products/{id}
+      async function deleteProduct(id) {
         if (!confirm("Yakin ingin menghapus produk ini?")) return;
         try {
-          const response = await fetch(`${API_URL}/api/products/${productId}`, {
-            method: "DELETE",
-          });
-          if (!response.ok) throw new Error("Gagal menghapus");
-          showModal("success", "Berhasil", "Produk berhasil dihapus");
+          const r = await fetch(`${API_URL}/api/products/${id}`, { method: "DELETE" });
+          if (!r.ok) throw new Error();
+          showModal("success", "Berhasil", "Produk dihapus");
           await loadProducts();
-        } catch (error) {
-          showModal("error", "Gagal", "Tidak bisa menghapus produk");
-          console.error("Error:", error);
-        }
+        } catch (e) { showModal("error", "Gagal", "Tidak bisa menghapus produk"); }
       }
 
-      // Add to cart
-      function addToCart(productId) {
-        const product = products.find((p) => p.id === productId);
-        if (!product) return;
-
-        const quantityInput = document.getElementById(`qty_${productId}`);
-        const quantity = parseInt(quantityInput.value);
-
-        if (quantity > product.stock) {
-          showModal(
-            "error",
-            "Stok Tidak Cukup",
-            `Stok ${product.name} hanya tersisa ${product.stock} unit`,
-          );
-          return;
-        }
-
-        const existingItem = cart.find((item) => item.productId === productId);
-        if (existingItem) {
-          existingItem.quantity += quantity;
-        } else {
-          cart.push({
-            productId: product.id,
-            name: product.name,
-            price: product.price,
-            quantity: quantity,
-            stock: product.stock,
-          });
-        }
-
+      // ================= CART + CHECKOUT =================
+      function addToCart(id) {
+        const p = products.find((x) => x.id === id);
+        if (!p) return;
+        const qty = parseInt(document.getElementById(`qty_${id}`).value);
+        if (qty > p.stock) { showModal("error", "Stok Tidak Cukup", `Stok ${p.name} tersisa ${p.stock}`); return; }
+        const ex = cart.find((i) => i.productId === id);
+        if (ex) ex.quantity += qty;
+        else cart.push({ productId: p.id, name: p.name, price: p.price, quantity: qty });
         localStorage.setItem("cart", JSON.stringify(cart));
         updateCartDisplay();
-        showModal(
-          "success",
-          "Berhasil!",
-          `${product.name} ditambahkan ke keranjang`,
-        );
+        showModal("success", "Berhasil", `${p.name} ditambahkan ke keranjang`);
       }
-
-      // Update cart display
-      // Catatan: badge di ikon keranjang sekarang menampilkan JUMLAH ORDER
-      // (lihat updateOrderBadge di loadOrders), bukan isi keranjang.
       function updateCartDisplay() {
-        const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-
-        if (cartCount === 0) {
-          document.getElementById("cartSection").style.display = "none";
-        }
+        const total = cart.reduce((s, i) => s + i.quantity, 0);
+        if (total === 0) document.getElementById("cartSection").style.display = "none";
       }
-
-      // Badge ikon keranjang = jumlah pesanan di Order History
-      function updateOrderBadge() {
-        document.getElementById("cartCount").textContent = orders.length;
-      }
-
-      // Klik ikon keranjang.
-      // Badge menampilkan JUMLAH ORDER, jadi perilakunya:
-      //  - Kalau keranjang belanja ada isinya  -> tampilkan keranjang (alur checkout)
-      //  - Kalau keranjang kosong tapi ada order -> arahkan ke Order History
-      //  - Kalau dua-duanya kosong               -> info ramah
+      function updateOrderBadge() { document.getElementById("cartCount").textContent = orders.length; }
       function toggleCart() {
-        const cartSection = document.getElementById("cartSection");
-
+        const sec = document.getElementById("cartSection");
         if (cart.length > 0) {
-          if (cartSection.style.display === "none") {
-            renderCart();
-            cartSection.style.display = "block";
-            cartSection.scrollIntoView({ behavior: "smooth" });
-          } else {
-            cartSection.style.display = "none";
-          }
+          if (sec.style.display === "none") { renderCart(); sec.style.display = "block"; sec.scrollIntoView({ behavior: "smooth" }); }
+          else sec.style.display = "none";
           return;
         }
-
-        if (orders.length > 0) {
-          showModal(
-            "info",
-            "Riwayat Pesanan",
-            `Kamu memiliki ${orders.length} pesanan. Menampilkan Order History...`,
-          );
-          document
-            .getElementById("ordersContainer")
-            .scrollIntoView({ behavior: "smooth" });
-        } else {
-          showModal(
-            "info",
-            "Belum Ada Aktivitas",
-            "Belum ada barang di keranjang maupun pesanan.",
-          );
-        }
+        document.getElementById("ordersContainer").scrollIntoView({ behavior: "smooth" });
       }
-
-      // Render cart
       function renderCart() {
-        const cartItemsContainer = document.getElementById("cartItems");
-        const cartTotalContainer = document.getElementById("cartTotal");
-
-        if (cart.length === 0) {
-          cartItemsContainer.innerHTML =
-            '<div class="loading">Keranjang kosong</div>';
-          cartTotalContainer.innerHTML = "";
-          return;
-        }
-
+        const items = document.getElementById("cartItems");
+        const totalEl = document.getElementById("cartTotal");
+        if (cart.length === 0) { items.innerHTML = '<div class="loading">Keranjang kosong</div>'; totalEl.innerHTML = ""; return; }
         let total = 0;
-        cartItemsContainer.innerHTML = cart
-          .map((item) => {
-            const itemTotal = item.price * item.quantity;
-            total += itemTotal;
-            return `
-                    <div class="cart-item">
-                        <div class="cart-item-info">
-                            <h4>${item.name}</h4>
-                            <div class="cart-item-price">${formatRupiah(item.price)} x ${item.quantity}</div>
-                        </div>
-                        <div class="cart-item-quantity">
-                            <div style="margin-right: 20px; font-weight: bold;">${formatRupiah(itemTotal)}</div>
-                            <button class="remove-item" onclick="removeFromCart(${item.productId})">Hapus</button>
-                        </div>
-                    </div>
-                `;
-          })
-          .join("");
-
-        cartTotalContainer.innerHTML = `Total: ${formatRupiah(total)}`;
+        items.innerHTML = cart.map((i) => {
+          const t = i.price * i.quantity; total += t;
+          return `<div class="cart-item">
+            <div class="cart-item-info"><h4>${i.name}</h4><div class="cart-item-price">${formatRupiah(i.price)} x ${i.quantity}</div></div>
+            <div class="cart-item-quantity"><div style="margin-right:20px;font-weight:bold;">${formatRupiah(t)}</div>
+            <button class="remove-item" onclick="removeFromCart(${i.productId})">Hapus</button></div></div>`;
+        }).join("");
+        totalEl.innerHTML = `Total: ${formatRupiah(total)}`;
       }
-
-      // Remove from cart
-      function removeFromCart(productId) {
-        cart = cart.filter((item) => item.productId !== productId);
+      function removeFromCart(id) {
+        cart = cart.filter((i) => i.productId !== id);
         localStorage.setItem("cart", JSON.stringify(cart));
-        updateCartDisplay();
-
-        if (cart.length === 0) {
-          document.getElementById("cartSection").style.display = "none";
-        } else {
-          renderCart();
-        }
+        if (cart.length === 0) document.getElementById("cartSection").style.display = "none";
+        else renderCart();
       }
-
-      // Checkout
+      // Checkout: order (Node) -> payment (Python) + shipment (PHP)
       async function checkout() {
-        if (cart.length === 0) {
-          showModal(
-            "error",
-            "Keranjang Kosong",
-            "Tidak ada produk untuk checkout",
-          );
-          return;
-        }
-
-        // Process each item in cart
-        let successCount = 0;
-        let failedItems = [];
-
+        if (cart.length === 0) { showModal("error", "Keranjang Kosong", "Tidak ada produk"); return; }
+        let ok = 0; const failed = [];
         for (const item of cart) {
           try {
-            const response = await fetch(`${API_URL}/api/orders`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                productId: item.productId,
-                quantity: item.quantity,
-              }),
+            const r = await fetch(`${API_URL}/api/orders`, {
+              method: "POST", headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ productId: item.productId, quantity: item.quantity }),
             });
-
-            if (response.ok) {
-              successCount++;
-              // Order berhasil -> buat pembayaran (Python) & pengiriman (PHP)
-              const createdOrder = await response.json();
-              await createPaymentAndShipment(createdOrder);
-            } else {
-              const error = await response.json();
-              failedItems.push(`${item.name} (${error.error || "Gagal"})`);
-            }
-          } catch (error) {
-            failedItems.push(`${item.name} (Network error)`);
-          }
+            if (r.ok) { ok++; const order = await r.json(); await createPaymentAndShipment(order); }
+            else { const e = await r.json(); failed.push(`${item.name} (${e.error || "gagal"})`); }
+          } catch (e) { failed.push(`${item.name} (network)`); }
         }
-
-        // Clear cart if at least one order succeeded
-        if (successCount > 0) {
-          cart = [];
-          localStorage.setItem("cart", JSON.stringify(cart));
-          updateCartDisplay();
+        if (ok > 0) {
+          cart = []; localStorage.setItem("cart", JSON.stringify(cart));
           document.getElementById("cartSection").style.display = "none";
-          await loadProducts(); // Refresh stock
-          await loadOrders(); // Refresh orders
-          await loadPayments(); // Refresh pembayaran (Python)
-          await loadShipments(); // Refresh pengiriman (PHP)
-
-          if (failedItems.length === 0) {
-            showModal(
-              "success",
-              "Checkout Berhasil!",
-              `${successCount} pesanan berhasil dibuat`,
-            );
-          } else {
-            showModal(
-              "warning",
-              "Checkout Sebagian Berhasil",
-              `${successCount} berhasil, ${failedItems.length} gagal:\n${failedItems.join("\n")}`,
-            );
-          }
-        } else {
-          showModal(
-            "error",
-            "Checkout Gagal",
-            "Tidak ada pesanan yang berhasil dibuat",
-          );
-        }
+          refreshAll();
+          showModal(failed.length ? "warning" : "success", "Checkout", `${ok} pesanan dibuat${failed.length ? "\nGagal: " + failed.join(", ") : ""}`);
+        } else { showModal("error", "Checkout Gagal", "Tidak ada pesanan yang berhasil"); }
+      }
+      async function createPaymentAndShipment(order) {
+        try {
+          await fetch(`${API_URL}/api/payments`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ orderId: order.id, amount: order.totalPrice }) });
+        } catch (e) {}
+        try {
+          await fetch(`${API_URL}/api/shipments`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ orderId: order.id, address: "Alamat Pelanggan" }) });
+        } catch (e) {}
       }
 
-      // Load orders
+      // ================= ORDERS (Node / MongoDB) =================
       async function loadOrders() {
         showLoading("ordersContainer");
         try {
-          const response = await fetch(`${API_URL}/api/orders`);
-          if (!response.ok) throw new Error("Failed to load orders");
-          orders = await response.json();
+          const r = await fetch(`${API_URL}/api/orders`);
+          if (!r.ok) throw new Error();
+          orders = await r.json();
           renderOrders();
           updateOrderBadge();
-        } catch (error) {
-          showError("ordersContainer", "Gagal memuat riwayat pesanan");
-          console.error("Error:", error);
-        }
+        } catch (e) { showError("ordersContainer", "Gagal memuat pesanan"); }
       }
-
-      // Render orders
       function renderOrders() {
-        const container = document.getElementById("ordersContainer");
-        if (!orders.length) {
-          container.innerHTML = '<div class="loading">Belum ada pesanan</div>';
-          return;
-        }
-
-        container.innerHTML = orders
-          .reverse()
-          .map(
-            (order) => `
-                <div class="order-card">
-                    <div class="order-header">
-                        <span class="order-id">Order #${order.id}</span>
-                        <span class="order-status">${order.status}</span>
-                    </div>
-                    <div class="order-details">
-                        <div>Produk: ${order.productName}</div>
-                        <div>Jumlah: ${order.quantity} unit</div>
-                        <div>Total: ${formatRupiah(order.totalPrice)}</div>
-                        <div>Tanggal: ${new Date(order.createdAt).toLocaleString("id-ID")}</div>
-                    </div>
-                </div>
-            `,
-          )
-          .join("");
+        const c = document.getElementById("ordersContainer");
+        if (!orders.length) { c.innerHTML = '<div class="loading">Belum ada pesanan</div>'; return; }
+        c.innerHTML = orders.slice().reverse().map((o) => `
+          <div class="order-card">
+            <div class="order-header"><span class="order-id">Order #${o.id}</span><span class="order-status">${o.status}</span></div>
+            <div class="order-details">
+              <div>Produk: ${o.productName}</div>
+              <div>Jumlah: ${o.quantity} unit</div>
+              <div>Total: ${formatRupiah(o.totalPrice)}</div>
+            </div>
+            <div class="row-actions">
+              ${statusSelect(`ostatus_${o.id}`, o.status, ["confirmed", "shipped", "delivered", "cancelled"])}
+              <button class="btn-sm btn-blue" onclick="updateOrderStatus(${o.id})">Update Status</button>
+              <button class="btn-sm btn-red" onclick="deleteOrder(${o.id})">Hapus</button>
+            </div>
+          </div>`).join("");
+      }
+      // PUT /api/orders/{id}/status
+      async function updateOrderStatus(id) {
+        const status = document.getElementById(`ostatus_${id}`).value;
+        try {
+          const r = await fetch(`${API_URL}/api/orders/${id}/status`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status }) });
+          if (!r.ok) throw new Error();
+          showModal("success", "Berhasil", `Status order #${id} → ${status}`);
+          await loadOrders();
+        } catch (e) { showModal("error", "Gagal", "Tidak bisa update status order"); }
+      }
+      // DELETE /api/orders/{id}
+      async function deleteOrder(id) {
+        if (!confirm("Hapus pesanan ini?")) return;
+        try {
+          const r = await fetch(`${API_URL}/api/orders/${id}`, { method: "DELETE" });
+          if (!r.ok) throw new Error();
+          showModal("success", "Berhasil", "Pesanan dihapus");
+          await loadOrders();
+        } catch (e) { showModal("error", "Gagal", "Tidak bisa menghapus pesanan"); }
       }
 
-      // Buat pembayaran (Payment Service - Python) & pengiriman (Shipping Service - PHP)
-      async function createPaymentAndShipment(order) {
-        try {
-          await fetch(`${API_URL}/api/payments`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              orderId: order.id,
-              amount: order.totalPrice,
-            }),
-          });
-        } catch (error) {
-          console.error("Payment error:", error);
-        }
-        try {
-          await fetch(`${API_URL}/api/shipments`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              orderId: order.id,
-              address: "Alamat Pelanggan",
-            }),
-          });
-        } catch (error) {
-          console.error("Shipment error:", error);
-        }
-      }
-
-      // Load payments (Python / Flask)
+      // ================= PAYMENTS (Python / PostgreSQL) =================
       async function loadPayments() {
         try {
-          const response = await fetch(`${API_URL}/api/payments`);
-          if (!response.ok) throw new Error("Failed to load payments");
-          renderPayments(await response.json());
-        } catch (error) {
-          showError("paymentsContainer", "Gagal memuat pembayaran");
-          console.error("Error:", error);
-        }
+          const r = await fetch(`${API_URL}/api/payments`);
+          if (!r.ok) throw new Error();
+          renderPayments(await r.json());
+        } catch (e) { showError("paymentsContainer", "Gagal memuat pembayaran"); }
       }
-
       function renderPayments(list) {
-        const container = document.getElementById("paymentsContainer");
-        if (!list.length) {
-          container.innerHTML =
-            '<div class="loading">Belum ada pembayaran</div>';
-          return;
-        }
-        container.innerHTML = list
-          .slice()
-          .reverse()
-          .map(
-            (p) => `
-                <div class="order-card">
-                    <div class="order-header">
-                        <span class="order-id">Payment #${p.id}</span>
-                        <span class="order-status">${p.status}</span>
-                    </div>
-                    <div class="order-details">
-                        <div>Order ID: ${p.orderId}</div>
-                        <div>Jumlah: ${formatRupiah(p.amount)}</div>
-                        <div>Metode: ${p.method || "-"}</div>
-                    </div>
-                </div>
-            `,
-          )
-          .join("");
+        const c = document.getElementById("paymentsContainer");
+        if (!list.length) { c.innerHTML = '<div class="loading">Belum ada pembayaran</div>'; return; }
+        c.innerHTML = list.slice().reverse().map((p) => `
+          <div class="order-card">
+            <div class="order-header"><span class="order-id">Payment #${p.id}</span><span class="order-status">${p.status}</span></div>
+            <div class="order-details">
+              <div>Order ID: ${p.orderId}</div>
+              <div>Jumlah: ${formatRupiah(p.amount)}</div>
+              <div>Metode: ${p.method || "-"}</div>
+            </div>
+            <div class="row-actions">
+              ${statusSelect(`pstatus_${p.id}`, p.status, ["paid", "pending", "refunded"])}
+              <button class="btn-sm btn-blue" onclick="updatePaymentStatus(${p.id})">Update Status</button>
+            </div>
+          </div>`).join("");
+      }
+      // PUT /api/payments/{id}/status
+      async function updatePaymentStatus(id) {
+        const status = document.getElementById(`pstatus_${id}`).value;
+        try {
+          const r = await fetch(`${API_URL}/api/payments/${id}/status`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status }) });
+          if (!r.ok) throw new Error();
+          showModal("success", "Berhasil", `Status payment #${id} → ${status}`);
+          await loadPayments();
+        } catch (e) { showModal("error", "Gagal", "Tidak bisa update status pembayaran"); }
       }
 
-      // Load shipments (PHP)
+      // ================= SHIPMENTS (PHP / SQLite) =================
       async function loadShipments() {
         try {
-          const response = await fetch(`${API_URL}/api/shipments`);
-          if (!response.ok) throw new Error("Failed to load shipments");
-          renderShipments(await response.json());
-        } catch (error) {
-          showError("shipmentsContainer", "Gagal memuat pengiriman");
-          console.error("Error:", error);
-        }
+          const r = await fetch(`${API_URL}/api/shipments`);
+          if (!r.ok) throw new Error();
+          renderShipments(await r.json());
+        } catch (e) { showError("shipmentsContainer", "Gagal memuat pengiriman"); }
       }
-
       function renderShipments(list) {
-        const container = document.getElementById("shipmentsContainer");
-        if (!list.length) {
-          container.innerHTML =
-            '<div class="loading">Belum ada pengiriman</div>';
-          return;
-        }
-        container.innerHTML = list
-          .slice()
-          .reverse()
-          .map(
-            (s) => `
-                <div class="order-card">
-                    <div class="order-header">
-                        <span class="order-id">Shipment #${s.id}</span>
-                        <span class="order-status">${s.status}</span>
-                    </div>
-                    <div class="order-details">
-                        <div>Order ID: ${s.orderId}</div>
-                        <div>Kurir: ${s.courier}</div>
-                        <div>No. Resi: ${s.trackingNumber}</div>
-                    </div>
-                </div>
-            `,
-          )
-          .join("");
+        const c = document.getElementById("shipmentsContainer");
+        if (!list.length) { c.innerHTML = '<div class="loading">Belum ada pengiriman</div>'; return; }
+        c.innerHTML = list.slice().reverse().map((s) => `
+          <div class="order-card">
+            <div class="order-header"><span class="order-id">Shipment #${s.id}</span><span class="order-status">${s.status}</span></div>
+            <div class="order-details">
+              <div>Order ID: ${s.orderId}</div>
+              <div>Kurir: ${s.courier}</div>
+              <div>No. Resi: ${s.trackingNumber}</div>
+            </div>
+            <div class="row-actions">
+              ${statusSelect(`sstatus_${s.id}`, s.status, ["processing", "shipped", "delivered"])}
+              <button class="btn-sm btn-blue" onclick="updateShipmentStatus(${s.id})">Update Status</button>
+            </div>
+          </div>`).join("");
+      }
+      // PUT /api/shipments/{id}/status
+      async function updateShipmentStatus(id) {
+        const status = document.getElementById(`sstatus_${id}`).value;
+        try {
+          const r = await fetch(`${API_URL}/api/shipments/${id}/status`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status }) });
+          if (!r.ok) throw new Error();
+          showModal("success", "Berhasil", `Status shipment #${id} → ${status}`);
+          await loadShipments();
+        } catch (e) { showModal("error", "Gagal", "Tidak bisa update status pengiriman"); }
       }
 
-      // Helper functions
-      function formatRupiah(amount) {
-        return new Intl.NumberFormat("id-ID", {
-          style: "currency",
-          currency: "IDR",
-          minimumFractionDigits: 0,
-        }).format(amount);
-      }
-
-      function showLoading(containerId) {
-        document.getElementById(containerId).innerHTML =
-          '<div class="loader"></div>';
-      }
-
-      function showError(containerId, message) {
-        document.getElementById(containerId).innerHTML =
-          `<div class="loading">❌ ${message}</div>`;
-      }
-
-      function showModal(type, title, message) {
-        const modal = document.getElementById("modal");
-        const modalIcon = document.getElementById("modalIcon");
-        const modalTitle = document.getElementById("modalTitle");
-        const modalMessage = document.getElementById("modalMessage");
-
-        const icons = {
-          success: "✅",
-          error: "❌",
-          warning: "⚠️",
-          info: "ℹ️",
-        };
-
-        modalIcon.innerHTML = `<div class="modal-${type}">${icons[type]}</div>`;
-        modalTitle.textContent = title;
-        modalMessage.textContent = message;
-        modal.style.display = "flex";
-
-        // Auto close after 3 seconds for success
-        if (type === "success") {
-          setTimeout(closeModal, 3000);
-        }
-      }
-
-      function closeModal() {
-        document.getElementById("modal").style.display = "none";
-      }
-
-      // Auto refresh every 30 seconds
-      setInterval(() => {
-        loadProducts();
-        loadOrders();
-        loadPayments();
-        loadShipments();
-      }, 30000);
+      // Auto refresh tiap 15 detik (agar perubahan dari Postman/Apollo ikut tampil)
+      setInterval(refreshAll, 15000);
     </script>
   </body>
 </html>
