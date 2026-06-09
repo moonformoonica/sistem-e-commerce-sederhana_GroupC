@@ -74,6 +74,23 @@ def list_payments():
     return jsonify([row_to_payment(r) for r in rows])
 
 
+@app.route("/payments/order/<int:order_id>", methods=["GET"])
+def get_payment_by_order(order_id):
+    # Didefinisikan SEBELUM /payments/<id> agar tidak salah routing
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT id, order_id, amount, method, status, paid_at FROM payments WHERE order_id = %s ORDER BY id DESC LIMIT 1",
+        (order_id,),
+    )
+    row = cur.fetchone()
+    cur.close()
+    conn.close()
+    if not row:
+        return jsonify({"error": "Payment not found"}), 404
+    return jsonify(row_to_payment(row))
+
+
 @app.route("/payments/<int:payment_id>", methods=["GET"])
 def get_payment(payment_id):
     conn = get_conn()
@@ -119,6 +136,29 @@ def create_payment():
     cur.close()
     conn.close()
     return jsonify(row_to_payment(row)), 201
+
+
+@app.route("/payments/<int:payment_id>/status", methods=["PUT"])
+def update_payment_status(payment_id):
+    data = request.get_json(silent=True) or {}
+    status = data.get("status")
+    allowed = ["paid", "pending", "refunded"]
+    if status not in allowed:
+        return jsonify({"error": "Invalid status. Allowed: " + ", ".join(allowed)}), 400
+
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute(
+        "UPDATE payments SET status = %s WHERE id = %s RETURNING id, order_id, amount, method, status, paid_at",
+        (status, payment_id),
+    )
+    row = cur.fetchone()
+    conn.commit()
+    cur.close()
+    conn.close()
+    if not row:
+        return jsonify({"error": "Payment not found"}), 404
+    return jsonify(row_to_payment(row))
 
 
 @app.route("/health", methods=["GET"])

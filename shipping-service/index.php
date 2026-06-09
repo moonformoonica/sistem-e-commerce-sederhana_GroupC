@@ -78,6 +78,20 @@ if ($method === 'GET' && $path === '/shipments') {
     exit;
 }
 
+// GET /shipments/track/{tracking_number}  (dicocokkan SEBELUM /shipments/{id})
+if ($method === 'GET' && preg_match('#^/shipments/track/([A-Za-z0-9]+)$#', $path, $m)) {
+    $stmt = $pdo->prepare("SELECT * FROM shipments WHERE tracking_number = ?");
+    $stmt->execute([$m[1]]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$row) {
+        http_response_code(404);
+        echo json_encode(["error" => "Shipment not found"]);
+        exit;
+    }
+    echo json_encode(map_row($row));
+    exit;
+}
+
 // GET /shipments/{id}
 if ($method === 'GET' && preg_match('#^/shipments/(\d+)$#', $path, $m)) {
     $stmt = $pdo->prepare("SELECT * FROM shipments WHERE id = ?");
@@ -123,6 +137,33 @@ if ($method === 'POST' && $path === '/shipments') {
 
     http_response_code(201);
     echo json_encode(map_row($row));
+    exit;
+}
+
+// PUT /shipments/{id}/status  (processing/shipped/delivered)
+if ($method === 'PUT' && preg_match('#^/shipments/(\d+)/status$#', $path, $m)) {
+    $body = json_decode(file_get_contents('php://input'), true) ?: [];
+    $status = $body['status'] ?? null;
+    $allowed = ['processing', 'shipped', 'delivered'];
+    if (!in_array($status, $allowed, true)) {
+        http_response_code(400);
+        echo json_encode(["error" => "Invalid status. Allowed: " . implode(', ', $allowed)]);
+        exit;
+    }
+
+    $id = (int) $m[1];
+    $check = $pdo->prepare("SELECT id FROM shipments WHERE id = ?");
+    $check->execute([$id]);
+    if (!$check->fetch()) {
+        http_response_code(404);
+        echo json_encode(["error" => "Shipment not found"]);
+        exit;
+    }
+
+    $pdo->prepare("UPDATE shipments SET status = ? WHERE id = ?")->execute([$status, $id]);
+    $stmt = $pdo->prepare("SELECT * FROM shipments WHERE id = ?");
+    $stmt->execute([$id]);
+    echo json_encode(map_row($stmt->fetch(PDO::FETCH_ASSOC)));
     exit;
 }
 

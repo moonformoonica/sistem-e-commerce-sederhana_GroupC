@@ -59,6 +59,26 @@ public class ProductController {
                 .orElseGet(() -> ResponseEntity.status(404).body(Map.of("error", "Product not found")));
     }
 
+    // PUT /products/{id} - update penuh (name, price, stock) via JPA
+    @SuppressWarnings("null")
+    @PutMapping("/products/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Product body) {
+        return repo.findById(id)
+                .<ResponseEntity<?>>map(p -> {
+                    if (body.getName() != null) {
+                        p.setName(body.getName());
+                    }
+                    if (body.getPrice() != null) {
+                        p.setPrice(body.getPrice());
+                    }
+                    if (body.getStock() != null) {
+                        p.setStock(body.getStock());
+                    }
+                    return ResponseEntity.ok(repo.save(p));
+                })
+                .orElseGet(() -> ResponseEntity.status(404).body(Map.of("error", "Product not found")));
+    }
+
     // DELETE /products/{id}
     @SuppressWarnings("null")
     @DeleteMapping("/products/{id}")

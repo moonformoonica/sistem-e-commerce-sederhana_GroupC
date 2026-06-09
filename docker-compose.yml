@@ -12,20 +12,19 @@ services:
     build: ./api-gateway
     ports:
       - "8000:3000"
-    environment:
-      LARAVEL_SERVICE_URL: http://laravel-service:8000
     depends_on:
       - product-service
       - order-service
       - payment-service
       - shipping-service
-      - laravel-service
     networks:
       - ecommerce-network
 
   # Product Service: Java/Spring Boot+MySQL
   product-service:
     build: ./product-service
+    ports:
+      - "3001:3001"
     environment:
       DB_HOST: mysql-db
       DB_PORT: 3306
@@ -41,6 +40,8 @@ services:
   # Order Service: JavaScript/Node.js & Express.js+MongoDB
   order-service:
     build: ./order-service
+    ports:
+      - "3002:3002"
     environment:
       PRODUCT_SERVICE_URL: http://product-service:3001
       MONGO_URI: mongodb://mongo-db:27017
@@ -54,6 +55,8 @@ services:
   # Payment Service: Python/Flask+PostgreSQL
   payment-service:
     build: ./payment-service
+    ports:
+      - "3003:3003"
     environment:
       ORDER_SERVICE_URL: http://order-service:3002
       DB_HOST: postgres-db
@@ -70,19 +73,12 @@ services:
   # Shipping Service: PHP/PHP+SQLite
   shipping-service:
     build: ./shipping-service
+    ports:
+      - "3004:3004"
     environment:
       SQLITE_PATH: /data/shipments.sqlite
     volumes:
       - shipping-data:/data
-    networks:
-      - ecommerce-network
-
-  # Laravel Service: PHP/Laravel+SQLite
-  laravel-service:
-    build: ./laravel-service
-    container_name: laravel-service
-    ports:
-      - "8001:8000"
     networks:
       - ecommerce-network
 

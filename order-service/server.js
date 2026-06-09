@@ -101,6 +101,40 @@ app.post('/orders', async (req, res) => {
   }
 });
 
+// PUT /orders/:id/status - ubah status (confirmed/shipped/delivered/cancelled)
+app.put('/orders/:id/status', async (req, res) => {
+  try {
+    const { status } = req.body;
+    const allowed = ['confirmed', 'shipped', 'delivered', 'cancelled'];
+    if (!allowed.includes(status)) {
+      return res.status(400).json({ error: `Invalid status. Allowed: ${allowed.join(', ')}` });
+    }
+    const id = parseInt(req.params.id);
+    const result = await ordersCol.findOneAndUpdate(
+      { id },
+      { $set: { status } },
+      { returnDocument: 'after', projection: { _id: 0 } }
+    );
+    const order = result && result.value ? result.value : result;
+    if (!order) return res.status(404).json({ error: 'Order not found' });
+    res.json(order);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// DELETE /orders/:id
+app.delete('/orders/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const result = await ordersCol.deleteOne({ id });
+    if (result.deletedCount === 0) return res.status(404).json({ error: 'Order not found' });
+    res.json({ message: 'Order deleted', id });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.get('/health', (req, res) => {
   res.json({
     service: 'order-service',
