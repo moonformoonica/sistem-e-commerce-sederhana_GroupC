@@ -109,9 +109,9 @@
         </div>
       </div>
 
-      <!-- Products Section (Product Service - Java / MySQL) -->
+      <!-- Products Section -->
       <div class="products-section">
-        <h2 class="section-title">🛒 Produk (Java / MySQL)</h2>
+        <h2 class="section-title">🛒 Produk</h2>
         <div class="add-form">
           <input id="np_name" placeholder="Nama produk" />
           <input id="np_price" type="number" placeholder="Harga" />
@@ -129,21 +129,21 @@
         <button class="checkout-btn" onclick="checkout()">✅ Checkout Sekarang</button>
       </div>
 
-      <!-- Orders Section (Order Service - Node / MongoDB) -->
+      <!-- Orders Section -->
       <div class="orders-section">
-        <h2 class="section-title">📋 Pesanan (Node / MongoDB)</h2>
+        <h2 class="section-title">📋 Pesanan</h2>
         <div id="ordersContainer"></div>
       </div>
 
-      <!-- Payments Section (Payment Service - Python / PostgreSQL) -->
+      <!-- Payments Section -->
       <div class="orders-section">
-        <h2 class="section-title">💳 Pembayaran (Python / PostgreSQL)</h2>
+        <h2 class="section-title">💳 Pembayaran</h2>
         <div id="paymentsContainer"></div>
       </div>
 
-      <!-- Shipments Section (Shipping Service - PHP / SQLite) -->
+      <!-- Shipments Section -->
       <div class="orders-section">
-        <h2 class="section-title">🚚 Pengiriman (PHP / SQLite)</h2>
+        <h2 class="section-title">🚚 Pengiriman</h2>
         <div id="shipmentsContainer"></div>
       </div>
     </div>
@@ -195,7 +195,7 @@
       }
       function closeModal() { document.getElementById("modal").style.display = "none"; }
 
-      // ================= PRODUCTS (Java / MySQL) =================
+      // ================= PRODUCTS =================
       async function loadProducts() {
         showLoading("productsContainer");
         try {
@@ -367,7 +367,7 @@
         } catch (e) {}
       }
 
-      // ================= ORDERS (Node / MongoDB) =================
+      // ================= ORDERS =================
       async function loadOrders() {
         showLoading("ordersContainer");
         try {
@@ -417,7 +417,7 @@
         } catch (e) { showModal("error", "Gagal", "Tidak bisa menghapus pesanan"); }
       }
 
-      // ================= PAYMENTS (Python / PostgreSQL) =================
+      // ================= PAYMENTS =================
       async function loadPayments() {
         try {
           const r = await fetch(`${API_URL}/api/payments`);
@@ -453,7 +453,7 @@
         } catch (e) { showModal("error", "Gagal", "Tidak bisa update status pembayaran"); }
       }
 
-      // ================= SHIPMENTS (PHP / SQLite) =================
+      // ================= SHIPMENTS =================
       async function loadShipments() {
         try {
           const r = await fetch(`${API_URL}/api/shipments`);
