@@ -18,7 +18,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Main Page (status JSON; halaman HTML dipindah ke frontend/gateway-status.html)
+// Main Page (status JSON, halaman HTML dipindah ke frontend/gateway-status.html)
 app.get("/", (req, res) => {
   res.json({ service: "api-gateway", status: "running" });
 });
