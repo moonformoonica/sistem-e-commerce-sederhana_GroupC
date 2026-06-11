@@ -38,7 +38,7 @@ public class ProductController {
                 .orElseGet(() -> ResponseEntity.status(404).body(Map.of("error", "Product not found")));
     }
 
-    // createProduct | POST http://localhost:3001/products -d '{"name": "Laptop", "price": 10000, "stock": 5}'
+    // createProduct | POST http://localhost:3001/products
     @PostMapping("/products")
     public ResponseEntity<Product> create(@RequestBody Product p) {
         if (p.getStock() == null) {
@@ -47,7 +47,7 @@ public class ProductController {
         return ResponseEntity.status(201).body(repo.save(p));
     }
 
-    // updateStock | PUT http://localhost:3001/products/1/stock -d '{"stock": 10}'
+    // updateStock | PUT http://localhost:3001/products/1/stock
     @SuppressWarnings("null")
     @PutMapping("/products/{id}/stock")
     public ResponseEntity<?> updateStock(@PathVariable Long id, @RequestBody Map<String, Object> body) {
@@ -59,7 +59,7 @@ public class ProductController {
                 .orElseGet(() -> ResponseEntity.status(404).body(Map.of("error", "Product not found")));
     }
 
-    // updateProduct | PUT http://localhost:3001/products/1 -d '{"name": "Laptop", "price": 10000, "stock": 5}'
+    // updateProduct | PUT http://localhost:3001/products/1
     @SuppressWarnings("null")
     @PutMapping("/products/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Product body) {
