@@ -52,7 +52,7 @@ services:
     networks:
       - ecommerce-network
 
-  # Payment Service: Python/Flask+PostgreSQL
+  # Payment Service: JavaScript/Express.js+PostgreSQL
   payment-service:
     build: ./payment-service
     ports:
