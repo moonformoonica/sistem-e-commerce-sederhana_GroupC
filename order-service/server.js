@@ -11,7 +11,7 @@ app.use(express.json());
 
 const PRODUCT_SERVICE_URL = process.env.PRODUCT_SERVICE_URL || 'http://product-service:3001';
 
-// ===== DB-MONGODB: Koneksi database MongoDB (Order Service) =====
+// DB-MONGODB: Koneksi database MongoDB (Order Service)
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://mongo-db:27017';
 const DB_NAME = process.env.MONGO_DB || 'order_service';
 
@@ -39,7 +39,7 @@ async function initDatabase(retries = 15) {
   throw new Error('[order-service] Gagal terhubung ke MongoDB.');
 }
 
-// DB-MONGODB: nextOrderId = auto-increment id sederhana memakai collection counters
+// DB-MONGODB: nextOrderId = auto-increment id
 async function nextOrderId() {
   const r = await countersCol.findOneAndUpdate(
     { _id: 'orderId' },

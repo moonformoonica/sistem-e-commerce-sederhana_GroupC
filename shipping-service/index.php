@@ -10,10 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// ===== DB-SQLITE: Lokasi file database SQLite (Shipping Service) =====
+// DB-SQLITE: Lokasi file database SQLite (Shipping Service)
 $DB_PATH = getenv('SQLITE_PATH') ?: '/data/shipments.sqlite';
 
-// DB-SQLITE: db() = buka koneksi PDO + buat tabel "shipments" jika belum ada
+// DB-SQLITE: db() = buka koneksi PHP Data Objects (PDO) + buat tabel "shipments" jika belum ada
 function db($path)
 {
     $dir = dirname($path);
@@ -34,7 +34,7 @@ function db($path)
     return $pdo;
 }
 
-// DB-SQLITE: map_row() = ubah baris tabel -> JSON response
+// DB-SQLITE: map_row() = ubah baris tabel -> JSON
 function map_row($r)
 {
     return [

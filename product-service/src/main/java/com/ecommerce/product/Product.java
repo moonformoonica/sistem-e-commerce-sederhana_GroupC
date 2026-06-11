@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-// DB-MYSQL: Entity = cetak biru tabel "products" di MySQL
+// DB-MYSQL: Entity=  "products" di MySQL
 @Entity
 @Table(name = "products")
 public class Product {
