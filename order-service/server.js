@@ -10,12 +10,16 @@ app.use(cors());
 app.use(express.json());
 
 const PRODUCT_SERVICE_URL = process.env.PRODUCT_SERVICE_URL || 'http://product-service:3001';
+
+// ===== DB-MONGODB: Koneksi database MongoDB (Order Service) =====
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://mongo-db:27017';
 const DB_NAME = process.env.MONGO_DB || 'order_service';
 
+// DB-MONGODB: collection "orders" (data pesanan) & "counters" (auto-increment id)
 let ordersCol;
 let countersCol;
 
+// DB-MONGODB: initDatabase = buka koneksi + siapkan collection (dengan retry)
 async function initDatabase(retries = 15) {
   while (retries > 0) {
     try {
@@ -35,7 +39,7 @@ async function initDatabase(retries = 15) {
   throw new Error('[order-service] Gagal terhubung ke MongoDB.');
 }
 
-// Auto-increment id sederhana memakai collection counters
+// DB-MONGODB: nextOrderId = auto-increment id sederhana memakai collection counters
 async function nextOrderId() {
   const r = await countersCol.findOneAndUpdate(
     { _id: 'orderId' },

@@ -12,6 +12,7 @@ CORS(app)
 PORT = int(os.getenv("PORT", 3003))
 ORDER_SERVICE_URL = os.getenv("ORDER_SERVICE_URL", "http://order-service:3002")
 
+# ===== DB-POSTGRESQL: Koneksi database PostgreSQL (Payment Service) =====
 DB_CONFIG = {
     "host": os.getenv("DB_HOST", "postgres-db"),
     "port": int(os.getenv("DB_PORT", 5432)),
@@ -21,10 +22,12 @@ DB_CONFIG = {
 }
 
 
+# DB-POSTGRESQL: get_conn = buka koneksi baru ke PostgreSQL
 def get_conn():
     return psycopg2.connect(**DB_CONFIG)
 
 
+# DB-POSTGRESQL: init_db = buat tabel "payments" jika belum ada (dengan retry)
 def init_db(retries=15):
     while retries > 0:
         try:
@@ -52,6 +55,7 @@ def init_db(retries=15):
     raise RuntimeError("[payment-service] Gagal terhubung ke PostgreSQL.")
 
 
+# DB-POSTGRESQL: row_to_payment = ubah baris tabel -> JSON response
 def row_to_payment(r):
     return {
         "id": r[0],
