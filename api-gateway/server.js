@@ -49,7 +49,7 @@ app.use(
   }),
 );
 
-// Proxy ke payment service (Python / Flask)
+// Proxy ke payment service
 app.use(
   "/api/payments",
   createProxyMiddleware({
@@ -62,7 +62,7 @@ app.use(
   }),
 );
 
-// Proxy ke shipping service (PHP)
+// Proxy ke shipping service
 app.use(
   "/api/shipments",
   createProxyMiddleware({
